@@ -1,26 +1,34 @@
 import asyncio
-from aiogram import Bot, Dispatcher, types
-from aiogram.filters import CommandStart
+import os
 
+from aiogram import Bot, Dispatcher
+from aiogram import types
 
+from dotenv import find_dotenv, load_dotenv
+load_dotenv(find_dotenv())
 
-bot = Bot(token="7091338449:AAER5EguBln8K4m3qvatYefnZBxMlLvBiuM")
+from handlers.user_private import user_private_router
+from handlers.user_group import user_group_router
+from common.bot_cmds_list import private
+
+ALLOWED_UPDATES = ['message, edited_message']
+
+bot = Bot(token=os.getenv('TOKEN'))
 
 dp = Dispatcher() #Этот класс обрабатывает все события
 
+dp.include_router(user_private_router)
+dp.include_router(user_group_router)
 
-@dp.message(CommandStart()) #фильтрация событий по сообщениям
-async def start_cmd(message: types.Message):
-    await message.answer('Это была команда старт')
 
-@dp.message() 
-async def echo(message: types.Message):
-    await message.answer(message.text)
+
 
 
 
 async def main():
-    await dp.start_polling(bot)
+    await bot.delete_webhook(drop_pending_updates=True)
+    await bot.set_my_commands(commands=private, scope=types.BotCommandScopeAllPrivateChats())
+    await dp.start_polling(bot, allowed_updates=ALLOWED_UPDATES)
 
 
 
