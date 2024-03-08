@@ -87,4 +87,3 @@ async def menu_cmd(message: types.Message):
 # async def get_location(message: types.Message):
 #     await message.answer(f"локация получена")
 #     await message.answer(str(message.location))
-
