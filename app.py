@@ -14,7 +14,6 @@ from handlers.user_private import user_private_router
 from handlers.user_group import user_group_router
 from handlers.admin_private import admin_router
 
-from common.bot_cmds_list import private
 from database.engine import create_db, drop_db, session_maker
 
 
@@ -35,11 +34,7 @@ dp.include_router(user_group_router)
 dp.include_router(admin_router) 
 
 async def on_startup(bot):
-    #Можно удалять бд в зависимости от параметров функции
-    run_param = False
-    if run_param:
-        await drop_db()
-
+    # await drop_db()
     await create_db()
 
 async def on_shutdown(bot):
@@ -54,8 +49,7 @@ async def main():
     dp.update.middleware(DataBaseSession(session_pool=session_maker))
 
     await bot.delete_webhook(drop_pending_updates=True) #Сброс обновлений, которые бот получал, пока был отключен
-    # await bot.delete_my_commands(scope=types.BotCommandScopeAllPrivateChats()) - удаление команд из тг-меню команд
-    await bot.set_my_commands(commands=private, scope=types.BotCommandScopeAllPrivateChats())
+    # await bot.delete_my_commands(scope=types.BotCommandScopeAllPrivateChats())  #удаление команд из тг-меню команд
     await dp.start_polling(bot, allowed_updates=dp.resolve_used_update_types()) #запускает отслеживание обновлений
 
 if __name__ == "__main__":
