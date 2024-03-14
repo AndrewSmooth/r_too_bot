@@ -2,17 +2,14 @@ from aiogram import F, types, Router
 from aiogram.filters import CommandStart
 
 from sqlalchemy.ext.asyncio import AsyncSession
-from database.orm_query import (
-    orm_add_to_cart,
-    orm_add_user,
-)
+from database.orm_query import (orm_add_to_cart, orm_add_user)
 
 from filters.chat_types import ChatTypeFilter
 from handlers.menu_processing import get_menu_content
-from kbds.inline import MenuCallback, get_callback_btns
+from kbds.inline import MenuCallback
 
 
-
+#Создание роутера с фильтром приватных сообщений
 user_private_router = Router()
 user_private_router.message.filter(ChatTypeFilter(["private"]))
 
@@ -56,5 +53,3 @@ async def user_menu(callback: types.CallbackQuery, callback_data: MenuCallback, 
 
     await callback.message.edit_media(media=media, reply_markup=reply_markup)
     await callback.answer()
-
-#У aiogram есть своя фабрика колбэков

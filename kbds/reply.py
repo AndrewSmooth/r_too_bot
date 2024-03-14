@@ -1,6 +1,7 @@
 from aiogram.types import KeyboardButton
 from aiogram.utils.keyboard import ReplyKeyboardBuilder
 
+
 #функция создает и возвращает клавиатуру
 def get_keyboard(
     *btns: str,
@@ -10,8 +11,8 @@ def get_keyboard(
     sizes: tuple[int] = (2, ),
 ):
     '''
-    Parameters request_contact and request_location must be as indexes of btns args for buttons you need.
-    Example:
+    Параметры request_contact и request_location должны быть индексами соответствующих кнопок btns.
+    Пример:
     get_keyboard(
             "Меню",
             "О магазине",
@@ -37,5 +38,3 @@ def get_keyboard(
 
     return keyboard.adjust(*sizes).as_markup(
             resize_keyboard=True, input_field_placeholder=placeholder)
-
-
